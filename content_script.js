@@ -96,6 +96,13 @@ function get_data(){
 		});
 
 	output = "name,handle,conversation,time,content,replies,retweets,favourites\n";	
+	output_tags = ["id_str"];
+	
+	$(".js-stream-item .stream-item .stream-item")
+		.each(function(index,value){
+			id = $(value).data("item-id");
+			output_tags.push(id);
+	});
 
 	$(".stream-items .original-tweet .content")
 		.each(
@@ -289,6 +296,7 @@ function get_data(){
 		
 	var blob = new Blob([output], {type: "text/plain;charset=utf-8"});	
 	saveAs(blob, hashtag + "-" + counter++ + "-download.csv");
+	console.log(output_tags);
 	
 	$(".stream-items li:not(:last-child)")
 		.remove();
