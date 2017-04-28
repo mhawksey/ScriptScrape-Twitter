@@ -30,7 +30,7 @@ $( document ).ready(function() {
 				.html("Stopping...");*/
 		console.log("send data to TAGS...");
 		$(this).prop('disabled',true);
-		$('#tags-holder').addClass('loading');
+		$('#tags-holder').addClass('loading').html("");
 		sendDataToTAGS();
 		
 		});
@@ -73,6 +73,13 @@ chrome.extension.onMessage.addListener(
 var SCRIPT_ID = '19Vt41N_8bY0QcW2M7o7bFRTiQh5Gz5j01ZN8M5_9lKKPQh_3xynYyfvu';
 
 /**
+ * Google APIs auth slow based on @abraham Chrome extension Google APIs
+ * https://github.com/GoogleDeveloperExperts/chrome-extension-google-apis
+ * Modified under The MIT License (MIT)
+ * Copyright (c) 2015 GoogleDeveloperExperts
+ */
+
+/**
  * Get users access_token.
  *
  * @param {object} options
@@ -100,15 +107,14 @@ function getAuthTokenSilent() {
  */
 function getAuthTokenSilentCallback(token) {
     // Catch chrome error if user is not authorized.
-	var authorizeDiv = document.getElementById('authorize-div');
-	var sendDiv = document.getElementById('send-div');
     if (chrome.runtime.lastError) {
         console.log("no auth"); 
-		authorizeDiv.style.display = 'inline';
+		$('#authorize-div').css('display', 'inline');
     } else {
         console.log("auth"); 
-		authorizeDiv.style.display = 'none';
-		sendDiv.style.display = 'inline';
+		$('#authorize-div').css('display', 'none');
+		$('#send-div').css('display', 'inline')
+		$("#send_button").removeAttr("disabled");
     }
 }
 
@@ -130,6 +136,7 @@ function getAuthTokenInteractive() {
 function getAuthTokenInteractiveCallback(token) {
     // Catch chrome error if user is not authorized.
     if (chrome.runtime.lastError) {
+		console.log("Auth token interactive error: " +chrome.runtime.lastError);
         getAuthTokenInteractive();
     } else {
 		getAuthTokenSilentCallback(token);
@@ -170,11 +177,9 @@ function sendDataToTAGS() {
 
 function updateTAGSStatusCallback(resp){
 	console.log(resp);
+	var info = "Something went wrong...";
 	if (resp.response.result.status == "ok"){
-		var info = "Open <a href='"+resp.response.result.doc+"' target='_blank'><strong>this sheet</strong></a> and select <strong>TAGS &gt; Build archive from tweet IDs</strong> from the dropdown menu";
-	} else {
-		var info = "Something went wrong"
-		console.log(resp.response.result.status);
+		info = "Open <a href='"+resp.response.result.doc+"' target='_blank'><strong>this sheet</strong></a> and select <strong>TAGS &gt; Build archive from tweet IDs</strong> from the dropdown menu";
 	}
 	$('#tags-holder').removeClass('loading').html(info);
 }
@@ -196,7 +201,9 @@ function post(options) {
 			options.callback(JSON.parse(xhr.responseText));
 		} else if(xhr.readyState === 4 && xhr.status !== 200) {
 			console.log('post', xhr.readyState, xhr.status, xhr.responseText);
-			$('#tags-holder').removeClass('loading').html(xhr.responseText);
+			$('#authorize-div').css('display', 'inline');
+			chrome.identity.removeCachedAuthToken({'token':options.token});
+			$('#tags-holder').removeClass('loading').html(JSON.parse(xhr.responseText).error.status);
 		}
 	};
 	xhr.open("POST", options.url, true);
