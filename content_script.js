@@ -1,18 +1,21 @@
 chrome.runtime.onMessage.addListener(
 	 
 	function(request, sender, sendResponse) {	
-		
-		if(request.command=="parse"){
-	
-			tab = request.tab;
-			scroll_document();
-			
-		}
-		
-		if(request.command=="stop"){
-	
-			console.log("stopping");
-			stop = true;
+		switch(request.command) {
+			case "parse":
+				tab = request.tab;
+				scroll_document();
+				break;
+			case "stop":
+				console.log("stopping");
+				stop = true;
+				break;
+			case "getIds":
+				console.log("sending Ids")
+				sendResponse({'data': output_tags,'searchTerm': search_string});
+				break;
+			case "authenticate":
+				break;
 			
 		}
 		
@@ -20,13 +23,15 @@ chrome.runtime.onMessage.addListener(
 		
 );
 
-stop = false;
-stream_length = 0;
-counter = 0;
-tweets = 0;
-last_parse = false;
-tab = 0;
-scroll_try = 0;
+var stop = false;
+var stream_length = 0;
+var counter = 0;
+var tweets = 0;
+var last_parse = false;
+var tab = 0;
+var scroll_try = 0;
+var output_tags = [];
+var search_string = "";
 
 function scroll_document(){
 
@@ -96,12 +101,13 @@ function get_data(){
 		});
 
 	output = "name,handle,conversation,time,content,replies,retweets,favourites\n";	
-	output_tags = ["id_str"];
+	output_tags.push(["id_str"]);
+	search_string = $('#search-query').val();
 	
-	$(".js-stream-item .stream-item .stream-item")
+	$("li.js-stream-item.stream-item.stream-item")
 		.each(function(index,value){
-			id = $(value).data("item-id");
-			output_tags.push(id);
+			id = $(value).attr("data-item-id");
+			output_tags.push([id]);
 	});
 
 	$(".stream-items .original-tweet .content")
@@ -308,8 +314,9 @@ function get_data(){
 		chrome.runtime.sendMessage({instruction: "update", tweets: "Harvest stopped"}, function(response) {
 		});		
 		chrome.runtime.sendMessage({instruction: "status", message: "Completed"}, function(response) {
-		});		
-	
+		});	
+		chrome.runtime.sendMessage({instruction: "complete"}, function(response) {
+		});
 	}else{
 	
 		setTimeout(scroll_document,1000);
@@ -317,3 +324,5 @@ function get_data(){
 	}
 	
 }
+
+

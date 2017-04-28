@@ -1,12 +1,22 @@
 <html>
 	<script type="text/javascript" src="jquery.min.js"></script>
-	<script type="text/javascript" src="popup.js"></script>	
+	<script type="text/javascript" src="popup.js"></script>
+	<link rel="stylesheet" href="css/style.css">
 	<body style="width:200px">
 	<p>Make sure you're on a search page and have clicked "latest", then click below</p>
-	<button id="search_harvest" style="width:200px">Search Term Harvest</button>
+	<button id="search_harvest" class="action" >Search Term Harvest</button>
 	<p id="data-holder"></p>
 	<p id="date-holder"></p>
 	<p id="status-holder"></p>
-	<button id="stop_button" style="width:200px; color:#000; background:#f00">STOP!</button>
+	<button id="stop_button"  class="create">STOP!</button>
+		<div id="authorize-div" style="display: none"> <p>Authorize access to send data to TAGS (<a href="https://tags.hawksey.info" target="_blank">What is TAGS?</a>)</p> 
+		<button id="authenticate_button">Authorize</button>
+	</div>
+	<div id="enable-send-div" style="display: none">
+		<div id="send-div" style="display: none"> <p></p> 
+			<button id="send_button">Send To TAGS</button>
+			<p id="tags-holder"></p>
+		</div>
+	</div>
 	</body>
 </html>

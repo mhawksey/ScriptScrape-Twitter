@@ -1,98 +1,74 @@
 chrome.extension.onMessage.addListener( 
-
 	function(request,sender,sendResponse){
-	
-		console.log(request);
-	
-		if( request.instruction === "GetURL" ){
-	
-			chrome.tabs.getSelected(null, function(tab) {
+		console.log(request.instruction);
+		switch (request.instruction){
+			case "GetURL":
+				chrome.tabs.getSelected(null, function(tab) {
+					chrome.tabs.sendMessage(tab.id, {command: "parse", tab: tab.id}, function(response) {
+						chrome.extension.sendMessage({command: response},
+							function (response) {
 
-				chrome.tabs.sendMessage(tab.id, {command: "parse", tab: tab.id}, function(response) {
-
-					chrome.extension.sendMessage({command: response},
-						function (response) {
-							
-						}); 
-
+							}); 
+					});
 				});
-		
-			});
-			
-		}
-		
-		if( request.instruction === "stop" ){
-		
-			chrome.tabs.getSelected(null, function(tab) {
+				break;
+			case "stop":
+				chrome.tabs.getSelected(null, function(tab) {
+					chrome.tabs.sendMessage(tab.id, {command: "stop", tab: tab.id}, function(response) {
+						chrome.extension.sendMessage({command: response},
+							function (response) {
 
-				chrome.tabs.sendMessage(tab.id, {command: "stop", tab: tab.id}, function(response) {
-
-					chrome.extension.sendMessage({command: response},
-						function (response) {
-							
-						}); 
-
+							}); 
+					});
 				});
-		
-			});
-			
-		}
+				break;
+			case "authenticate":
+				chrome.tabs.getSelected(null, function(tab) {
+					chrome.tabs.sendMessage(tab.id, {command: "authenticate", tab: tab.id}, function(response) {
+						chrome.extension.sendMessage({command: response},
+							function (response) {
 
+							}); 
+					});
+				});
+				break;
+		}
 	}
 );   
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
-  
-    if(request.instruction === "refresh"){
-	
+	  switch(request.instruction){
+		  case "refresh":
 			chrome.tabs.getSelected(null, function(tab) {
-
 				chrome.tabs.sendMessage(tab.id, {command: "update", updateText: request.tweets}, function(response) {
-
 					chrome.extension.sendMessage({command: response},
 						function (response) {
-							
+					
 						}); 
-
 				});
-		
 			});
-			
-	}
-	
-	if(request.instruction === "date"){
-	
+			break;
+		  case "date":
 			chrome.tabs.getSelected(null, function(tab) {
-
 				chrome.tabs.sendMessage(tab.id, {command: "date", date: request.date}, function(response) {
-
 					chrome.extension.sendMessage({command: response},
 						function (response) {
 							
 						}); 
-
-				});
-		
+				});	
 			});
-			
-	}
-	
-	if(request.instruction === "status"){
-	
+			break;
+		  case "status":
 			chrome.tabs.getSelected(null, function(tab) {
-
 				chrome.tabs.sendMessage(tab.id, {command: "status", message: request.message}, function(response) {
-
 					chrome.extension.sendMessage({command: response},
 						function (response) {
 							
 						}); 
 
 				});
-		
 			});
-			
-	}
-  
+			break;
+	  }  
   }); 

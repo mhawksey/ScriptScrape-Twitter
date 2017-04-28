@@ -26,9 +26,16 @@
     "permissions": [
         "tabs",
         "<all_urls>",
-        "http://*/"
+        "http://*/",
+		"identity",
+		"https://*.googleapis.com/*"
     ],
     "content_security_policy": "script-src 'self'; object-src 'self'",
+	"oauth2": {
+        "client_id": "992658104860-ad7ut1dic06g28fe31t530trairq1mpn.apps.googleusercontent.com",
+        "scopes": ["https://www.googleapis.com/auth/spreadsheets"]
+    },
+	"key": "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDAx0m2HJnoV8mDYLD7dEMJIu5D4YfAxjgCnls7M9G3pWpTr9UwTBPWsQWODylqADfRVUzPkbhkp/49lXzAzv4EOADuJYnmBF2k7R0lchckqFufPafKAlVkyCe5r0XGuc1Cuobw9jso3iwuKq5uG2RkvYFXmToiwPK2jGCmGCwpiv+bkTMAB5zhPX0/vuu2EuMA26AYNwuQI6ypm/pJLtRKP2g0LKRJ4e+Fw9WiYNpda6OuLYlOSyd1NaKou6WbkDZDEWh4oBMZFsZ+q9fF/IkMuC9xzGZQiWKE7Luwd3nFM8sIhTACgKWiV0lAUW9qABCx0Mi5tKJLlY6obh5YZns3AgMBAAECggEBAIHBogvCFJYfALQ9UOLvzm9H47gtBYLr6Kdaj225418JKBhMMeLgUjofzO1hpy6CFw//qkPMgaC+spIhHGdq6+9LAtVIzxjTt3RbZVLfCFTUPVdh2J5QE8pSLur83qp0RYS0qD9ofUl0wagRcncKWPi11Wlw6YCa/sOAmU0y2AbdLKDXXigvY+UvvdxtT5lv8wwHyp6+ykii9SpDd0Z7RIMo4MJ/Eahvd7WU080wXc8z4xrkvIUUFAu4nZWBDNRI5LGwde2ZmU/SEpfM6xG/Yn2mXiCztmY/XlS55a0X8kzLxXcuVGQChKERSdxrv3PxqYEfQYl3jwuRKiXJq/X8zYECgYEA7PVCEKOBd98UowaVYdTjyNun/9XuLjH8d8GGxzeojGAB+UMLZxcyNXVGRmwEJKUDBhlJISkURmxxNRbA7+TXJDdLrXrf3BZWoYv6ip3coh+tahwhcxtNtJPTZXZpX8fok7WY5i4XFm9PJZ6MhPZ2IlE9B1MssQkriNISksd4CEMCgYEA0EUo+hCtEshKQyvRuKOfwU6NSPANwb8zwTnWa76u+vKcreyUudus2PSneaiMjxhpEQHD3V0b/bo7UhigWUritceuGeZar0urDWYFUW+P3CwJ9au7tyqFeOXonuQtrPNenA3RM1hpUtK1EFTaY6DYaHb/Q/8Jy+nsK/XQKQyn2/0CgYBQ6wAAhpVzxe5aLaldm0GeGcSpDPklNVSt4JyR82PPbAnAgTCnp7gxoTa6XbCcgu0hbAkZFdoiom2WX4rLYS5G48soFsnTcp1q1U5df8MUahTiI3EYyb4jaEfMYj9hwfaeWmk4UYz40FIK2rXJwhBdb7iTg8fDPQps0rAdB5jp2QKBgCLyh/a2F6SgMT3mO3HFGwh/2ttTVKufHtscjmtT+t6nGT1iBm7NesqI+xVCABv+15p/9lLNzeWce1nCQh3ZoAMqt38nFS52/wPni5rnoncqeJ1drMkGfJEV2xvWZAeyary64NDB1CKOss1Dv8WZ9tZIqXrKb+VkojmaLMzGj+AtAoGAMQpJTXe+v0mbXP/4TkzSRMmhRxT2AuM2705SJwzODjjw+RArfFeOJ0WCq5VVYkTc911MQDkzEqNOKabjwgGbPo14zzVuD8DtKHNZxfxko5BUJAyozfzsxk2yVGylwm2fDqaid2UTDzk0T0d9kkRn9CiSfSh70ZkAGdDACjNu7KA=",
     "manifest_version": 2,
     "version": "0.1"
 }
