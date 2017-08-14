@@ -35,11 +35,16 @@ var search_string = "";
 
 function scroll_document(){
 
+	if(!stop){
+
+		console.log("document " + $(document).height());
+
 	if($(".back-to-top:visible").length!=1){
 		$("html, body").animate({ scrollTop: 0 }, 1);
 		$("html, body").animate({ scrollTop: $(document).height() }, 1);
 		if($(".stream-items").children().length>100){
 			scroll_try = 0;
+
 			parse_document();						
 		}else{
 			console.log("scroll try");
@@ -48,12 +53,49 @@ function scroll_document(){
 				});
 			setTimeout(scroll_document,1000);	
 		}
+			
+		}else{
+			
+			if($(".stream-items").children().length<100){
+				
+				$("html, body").animate({ scrollTop: 0 }, 1);
+				$("html, body").animate({ scrollTop: $(document).height() }, 1);
+				scroll_try++;
+			
+				chrome.runtime.sendMessage({instruction: "status", message: "Scrolling... " + $(".stream-items").children().length + " tweets available. " + 100 + " needed to process. Scrollling attempt : " + scroll_try}, function(response) {
+					});
+				setTimeout(scroll_document,1000);
+			
 	}else{
 		
+				if(scroll_try>20){
+			
 		chrome.runtime.sendMessage({instruction: "status", message: "Out of tweets..."}, function(response) {
 				});
 		stop = true;
+
 		parse_document();
+		
+				}else{
+				
+					$("html, body").animate({ scrollTop: 0 }, 1);
+					$("html, body").animate({ scrollTop: $(document).height() }, 1);
+					
+					scroll_try++;
+					chrome.runtime.sendMessage({instruction: "status", message: "Scrolling... " + $(".stream-items").children().length + " tweets available. " + 100 + " needed to process. Scrollling attempt : " + scroll_try}, function(response) {
+					});
+					setTimeout(scroll_document,1000);
+				
+				}
+				
+			}
+			
+		}
+		
+	}else{
+	
+		chrome.runtime.sendMessage({instruction: "status", message: "Stopped"}, function(response) {
+					});
 		
 	}
 	
@@ -76,19 +118,8 @@ function GetURLParameter(sParam){
 }
 
 function parse_document(){	
+		
 
-	/*$(".stream-items .content .stream-item-footer")
-		.each(
-		
-			function(index,value){
-			
-				//$(value)
-				//	.trigger("click");
-			
-			}
-			
-		);*/
-		
 	setTimeout(get_data,2000);
 		
 }
@@ -138,6 +169,7 @@ function get_data(){
 					.children()
 					.first()
 					.children()
+
 					.first()
 					.attr("src");
 					
@@ -324,5 +356,3 @@ function get_data(){
 	}
 	
 }
-
-
